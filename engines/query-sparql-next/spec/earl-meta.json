@@ -1,0 +1,26 @@
+{
+  "applicationBugsUrl": "https://github.com/comunica/comunica/issues",
+  "applicationDescription": "A Comunica engine for SPARQL query evaluation sing experimental features over heterogeneous interfaces",
+  "applicationHomepageUrl": "https://comunica.dev/",
+  "applicationNameFull": "Comunica SPARQL Next",
+  "applicationNameNpm": "@comunica/query-sparql-next",
+  "applicationUri": "https://www.npmjs.com/package/@comunica/query-sparql-next",
+  "authors": [
+    {
+      "homepage": "https://www.rubensworks.net/",
+      "name": "Ruben Taelman",
+      "uri": "https://www.rubensworks.net/#me"
+    },
+    {
+      "homepage": "https://jitsedesmet.be/",
+      "name": "Jitse De Smet",
+      "uri": "https://jitsedesmet.be/profile#me"
+    }
+  ],
+  "licenseUri": "http://opensource.org/licenses/MIT",
+  "reportUri": null,
+  "specificationUris": [
+    "http://www.w3.org/TR/sparql11-query/",
+    "http://www.w3.org/TR/sparql12-query/"
+  ]
+}

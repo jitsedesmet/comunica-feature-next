@@ -1,0 +1,48 @@
+{
+  "name": "@comunica/config-query-sparql-next",
+  "version": "0.0.0",
+  "private": "true",
+  "description": "default configuration files for Comunica SPARQL Next",
+  "lsd:module": true,
+  "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/comunica-association"
+  },
+  "homepage": "https://comunica.dev/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/comunica/comunica-feature-next.git",
+    "directory": "engines/config-query-sparql-next"
+  },
+  "bugs": {
+    "url": "https://github.com/comunica/comunica-feature-next/issues"
+  },
+  "keywords": [
+    "comunica",
+    "sparql",
+    "engine",
+    "query",
+    "update",
+    "config",
+    "next"
+  ],
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "typings": "lib/index",
+  "files": [
+    "components",
+    "config",
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "lib/**/*.js.map"
+  ],
+  "scripts": {
+    "build": "npm run build:ts && npm run build:components",
+    "build:ts": "node \"../../node_modules/typescript/bin/tsc\"",
+    "build:components": "componentsjs-generator"
+  },
+  "dependencies": {
+    "@comunica/config-query-sparql": "~5.0.0"
+  }
+}

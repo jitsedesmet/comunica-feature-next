@@ -1,0 +1,8 @@
+{
+  "source": "lib",
+  "ignorePackagePaths": [
+    "engines/query-sparql-next"
+  ],
+  "ignoreComponents": [],
+  "modulePrefix": {}
+}
