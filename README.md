@@ -22,7 +22,7 @@ With _experimental_ we **don't mean unstable, rather non-standardized**.
 
 Concretely, this monorepo adds experimental features support to Comunica using the following packages in the [packages directory](./packages).
 
-[Click here to learn more about Comunica Next, or to see live examples](https://comunica.dev/docs/query/advanced/next/). TODO: Make page
+[Click here to learn more about Comunica Next, or to see live examples](https://comunica.dev/docs/query/advanced/next/).
 
 ## Development Setup
 
