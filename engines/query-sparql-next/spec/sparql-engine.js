@@ -1,2 +1,2 @@
-const QueryEngine = require('@comunica/query-sparql').QueryEngine;
-module.exports = require('@comunica/actor-init-query/spec/sparql-engine-base.js')(new QueryEngine());
+const QueryEngine = require('@comunica/query-sparql-next').QueryEngine;
+module.exports = require('./sparql-engine-base.js')(new QueryEngine());

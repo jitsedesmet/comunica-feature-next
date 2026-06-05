@@ -5,7 +5,6 @@
 
 Comunica SPARQL Next is a SPARQL query engine for JavaScript for querying over decentralized RDF knowledge graphs on the Web using non-standardised functionalities.
 
-
 This module is part of the [Comunica framework](https://comunica.dev/).
 [Click here to learn more about Comunica and It's next features](https://comunica.dev/docs/query/advanced/next/).
 
@@ -40,7 +39,6 @@ a [dynamic variant](https://github.com/comunica/comunica/tree/master/packages/qu
 
 _[**Read more** about querying from the command line](https://comunica.dev/docs/query/getting_started/query_cli/)._
 
-
 ### Usage as a SPARQL endpoint
 
 Start a webservice exposing https://fragments.dbpedia.org/2015-10/en via the SPARQL protocol, i.e., a _SPARQL endpoint_.
@@ -61,7 +59,6 @@ An alternative config file can be passed via the `COMUNICA_CONFIG` environment v
 Use `bin/http.js` when running in the Comunica monorepo development environment.
 
 _[**Read more** about setting up a SPARQL endpoint](https://comunica.dev/docs/query/getting_started/setup_endpoint/)._
-
 
 ### Usage within application
 
@@ -128,4 +125,3 @@ Learn more about Comunica's functionalities in the following guides:
 * _[GraphQL-LD](https://comunica.dev/docs/query/advanced/graphql_ld/)_
 * _[Docker](https://comunica.dev/docs/query/getting_started/query_docker/)_
 * _[*Full documentation*](https://comunica.dev/docs/)_
-

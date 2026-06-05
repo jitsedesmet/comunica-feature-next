@@ -14,5 +14,5 @@
   "queryRunnerRequestDelay": 0,
   "queryRunnerEndpointAvailabilityCheckTimeout": 1000,
   "queryRunnerUrlParams": {},
-  "hookSparqlEndpoint": {"@id": "urn:jbr:benchmark-web:combination_1:hookSparqlEndpoint",  "@type": "HookSparqlEndpointComunica",  "dockerfileClient": "input/dockerfiles/Dockerfile-client",  "resourceConstraints": {"@type": "StaticDockerResourceConstraints","cpu_percentage": 100  },  "configClient": "input/config-client.json",  "contextClient": "input/context-client.json",  "clientPort": 3001,  "clientLogLevel": "info",  "queryTimeout": 60,  "maxMemory": 8192, "additionalBinds": []}
+  "hookSparqlEndpoint": { "@id": "urn:jbr:benchmark-web:combination_1:hookSparqlEndpoint", "@type": "HookSparqlEndpointComunica", "dockerfileClient": "input/dockerfiles/Dockerfile-client", "resourceConstraints": { "@type": "StaticDockerResourceConstraints", "cpu_percentage": 100 }, "configClient": "input/config-client.json", "contextClient": "input/context-client.json", "clientPort": 3001, "clientLogLevel": "info", "queryTimeout": 60, "maxMemory": 8192, "additionalBinds": [] }
 }

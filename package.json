@@ -10,8 +10,11 @@
   "scripts": {
     "test-changed": "lerna run test --since HEAD",
     "build-changed": "lerna run build --since HEAD",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test-ci": "jest --ci --maxWorkers=4 --coverage",
+    "test:integration": "lerna run integration --concurrency 1",
+    "test:spec": "lerna run spec --concurrency 1",
+    "test:docker": "lerna run test:docker --concurrency 1",
     "lint": "eslint . --cache",
     "clean": "rm -rf ./node_modules && rm -rf ./packages/*/node_modules",
     "depcheck": "depcheckTask @comunica/config-query-sparql-next",
