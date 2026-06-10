@@ -1,4 +1,4 @@
-import { toAlgebra, SparqlNextParser } from '@comunica/utils-traqula-parser-next';
+import { toAlgebra, SparqlNextParser } from '@comunica/utils-traqula-sparql-next';
 import { ActorFunctionFactoryTermAdjust } from '../lib';
 import { runFuncTestTable } from './util';
 import { dateTimeTyped, dateTyped, dayTimeDurationTyped, timeTyped } from './util/Aliases';

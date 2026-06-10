@@ -10,7 +10,7 @@ import { sparqlNextLexerBuilder } from './lexer';
 const existingBuiltIn = sparql12ParserBuilder.getRule('builtInCall');
 const builtInPatch: typeof existingBuiltIn = {
   name: 'builtInCall',
-  impl: $ => c => $.OR([
+  impl: $ => c => $.OR3([
     { ALT: () => existingBuiltIn.impl($)(c) },
     { ALT: () => $.SUBRULE(gramAdj.builtInAdjust) },
   ]),
