@@ -5,6 +5,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  NODE_VERSION_LOWEST: 22.x
+  NODE_VERSION_HIGHEST: 26.x
+
 jobs:
 
   misc:
@@ -69,7 +73,7 @@ jobs:
       - name: Run tests
         run: yarn run test-ci
       - name: Submit coverage results
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.github_token }}
           flag-name: run-${{ matrix.node-version }}
@@ -152,7 +156,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Consolidate test coverage from different jobs
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.github_token }}
           parallel-finished: true
@@ -322,28 +326,49 @@ jobs:
         with:
           body-path: ./commit-comment-body.txt
 
-  docs:
+  documentation:
+    name: Prepare documentation
     runs-on: ubuntu-latest
     steps:
-      - name: Use Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 26.x
+      - name: Ensure line endings are consistent
+        run: git config --global core.autocrlf input
       - name: Check out repository
         uses: actions/checkout@v6
-      - name: Load cache
-        uses: actions/cache@v5
+      - name: Use Node.js ${{ env.NODE_VERSION_LOWEST }}
+        uses: actions/setup-node@v6
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-docs-modules-v1-${{ hashFiles('**/yarn.lock') }}
+          node-version: ${{ env.NODE_VERSION_LOWEST }}
+          cache: yarn
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --ignore-engines
-      - name: Build docs
+        run: yarn install --ignore-scripts --frozen-lockfile
+      - name: Build documentation
         run: yarn run doc
-      - name: Deploy TSDoc to GitHub Pages
-        if: startsWith(github.ref, 'refs/heads/master')
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Prepare artifact
+        uses: actions/upload-pages-artifact@v5
         with:
-          branch: gh-pages
-          folder: documentation
-          clean: true
+          path: documentation
+          name: documentation
+
+  documentation-publish:
+    name: Publish documentation
+    needs:
+      - misc
+      - test
+      - spectest
+      - browsertest
+      - documentation
+    runs-on: ubuntu-latest
+    # The documentation is only published for master branch
+    if: startsWith(github.ref, 'refs/heads/master')
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+        with:
+          artifact_name: documentation
