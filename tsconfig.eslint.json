@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "engines/**/*.ts",
+    "jest.config.ts",
+    "packages/**/*.ts",
+    "playwright.config.ts",
+    "performance/**/*.ts"
+  ],
+  "exclude": [
+    "**/node_modules"
+  ]
+}
