@@ -85,6 +85,8 @@
     "test"
   ],
   "resolutions": {
-    "rdf-parse": "5.0.0"
+    "rdf-parse": "5.0.0",
+    "@traqula/chevrotain": "1.1.0",
+    "@traqula/core": "1.1.4"
   }
 }

@@ -4,7 +4,7 @@ import type { BaseQuad } from '@rdfjs/types';
 import { AstFactory, lex as l12 } from '@traqula/rules-sparql-1-2';
 import { positiveTest, importSparql11NoteTests, negativeTest, getStaticFilePath } from '@traqula/test-utils';
 import { DataFactory } from 'rdf-data-factory';
-import { SparqlNextParser, sparqlNextParserBuilder } from '../lib';
+import { SparqlNextParser, sparqlNextParserBuilder, toAlgebra, toAst } from '../lib';
 
 describe('a SPARQL 1.2 parser', () => {
   const astFactory = new AstFactory({ tracksSourceLocation: false });
@@ -94,5 +94,17 @@ describe('a SPARQL 1.2 parser', () => {
 
   describe('specific sparql 1.1 without source tracking', () => {
     importSparql11NoteTests(noSourceTrackingParser, new DataFactory<BaseQuad>());
+  });
+
+  it('can be instantiated without arguments', () => {
+    const parser = new SparqlNextParser();
+    expect(parser.parse('SELECT * WHERE { ?s ?p ?o }')).toBeDefined();
+  });
+
+  it('can convert algebra back to AST via toAst', () => {
+    const parser = new SparqlNextParser();
+    const parsed = parser.parse('SELECT * WHERE { ?s ?p ?o }');
+    const algebra = toAlgebra(parsed);
+    expect(toAst(algebra)).toBeDefined();
   });
 });

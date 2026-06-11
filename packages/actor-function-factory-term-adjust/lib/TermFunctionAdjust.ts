@@ -28,16 +28,37 @@ function serializeTimeZone(tz: Partial<ITimeZoneRepresentation>): string {
   if (tz.zoneHours === undefined && tz.zoneMinutes === undefined) {
     return '';
   }
-  if ((tz.zoneHours ?? 0) === 0 && (tz.zoneMinutes ?? 0) === 0) {
-    return 'Z';
-  }
+  const hours = tz.zoneHours ?? 0;
+  const minutes = tz.zoneMinutes ?? 0;
   // SerializeTimeZone({ zoneHours: 5, zoneMinutes: 4 }) returns +05:04
-  return `${(tz.zoneHours ?? 0) >= 0 ? `+${numSerializer(tz.zoneHours ?? 0)}` : numSerializer(tz.zoneHours ?? 0)}:${numSerializer(Math.abs(tz.zoneMinutes ?? 0))}`;
+  return `${hours >= 0 ? `+${numSerializer(hours)}` : numSerializer(hours)}:${numSerializer(Math.abs(minutes))}`;
 }
 
 class MyDateTimeLiteral extends DateTimeLiteral {
   public override str(): string {
     // TODO: fix upstream
+    return super.str() + serializeTimeZone(this.typedValue);
+  }
+}
+
+class MyDateLiteral extends DateLiteral {
+  public override str(): string {
+    // Upstream serializeDate skips timezone when zoneMinutes is undefined; use local serializer in that case
+    const { zoneHours, zoneMinutes } = this.typedValue;
+    if (zoneHours !== undefined && zoneMinutes !== undefined) {
+      return super.str();
+    }
+    return super.str() + serializeTimeZone(this.typedValue);
+  }
+}
+
+class MyTimeLiteral extends TimeLiteral {
+  public override str(): string {
+    // Upstream serializeTime skips timezone when zoneMinutes is undefined; use local serializer in that case
+    const { zoneHours, zoneMinutes } = this.typedValue;
+    if (zoneHours !== undefined && zoneMinutes !== undefined) {
+      return super.str();
+    }
     return super.str() + serializeTimeZone(this.typedValue);
   }
 }
@@ -114,7 +135,7 @@ export class TermFunctionAdjust extends TermFunctionBase {
             const asTimedDate = adjustDateTime([ asDateTime, timezone ]);
             const tv = asTimedDate.typedValue;
             // TODO: can introduce this trim function upstream
-            return new DateLiteral({
+            return new MyDateLiteral({
               day: tv.day,
               month: tv.month,
               year: tv.year,
@@ -133,7 +154,7 @@ export class TermFunctionAdjust extends TermFunctionBase {
             });
             const asTimedDate = adjustDateTime([ asDateTime, timezone ]);
             const tv = asTimedDate.typedValue;
-            return new TimeLiteral({
+            return new MyTimeLiteral({
               hours: tv.hours,
               minutes: tv.minutes,
               seconds: tv.seconds,

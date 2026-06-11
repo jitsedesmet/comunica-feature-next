@@ -3,7 +3,7 @@ import type {
   IActorFunctionFactoryArgs,
   MediatorFunctionFactory,
 } from '@comunica/bus-function-factory';
-import { BusFunctionFactorySelective } from '@comunica/bus-function-factory';
+import { BusFunctionFactory } from '@comunica/bus-function-factory';
 import { MediatorRace } from '@comunica/mediator-race';
 import { getMockEEFactory } from './util/helpers';
 import type { TestTableConfig } from './util/utils';
@@ -22,7 +22,7 @@ export function createFuncMediator<E extends object>(
   registeredActors: ((arg: RunFuncTestTableArgs & E) => ActorFunctionFactory)[],
   additionalArgs: E,
 ): MediatorFunctionFactory {
-  const bus = new BusFunctionFactorySelective({ name: 'test-bus-function-factory' });
+  const bus = new BusFunctionFactory({ name: 'test-bus-function-factory' });
   const mediatorFunctionFactory = <MediatorFunctionFactory> new MediatorRace({
     name: 'test-mediator-function-factory',
     bus,

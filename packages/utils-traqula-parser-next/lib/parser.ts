@@ -1,4 +1,4 @@
-import type { ParserBuildArgs } from '@traqula/core';
+import type { ParserBuildArgs, ImplArgs } from '@traqula/core';
 import { ParserBuilder } from '@traqula/core';
 import { sparql12ParserBuilder } from '@traqula/parser-sparql-1-2';
 import { gram as gram11 } from '@traqula/rules-sparql-1-1';
@@ -7,11 +7,25 @@ import type * as T12 from '@traqula/rules-sparql-1-2';
 import { gram as gram12, completeParseContext, copyParseContext } from '@traqula/rules-sparql-1-2';
 import { sparqlNextLexerBuilder } from './lexer';
 
-const existingBuiltIn = sparql12ParserBuilder.getRule('builtInCall');
-const builtInPatch: typeof existingBuiltIn = {
-  name: 'builtInCall',
-  impl: $ => c => $.OR3([
-    { ALT: () => existingBuiltIn.impl($)(c) },
+/**
+ * Patch builtInCall to add ADJUST support alongside all SPARQL 1.1 and 1.2 built-ins.
+ * Uses OR2 (occurrence 2) to avoid conflicts with SPARQL 1.1's internal OR (occurrence 0).
+ * SPARQL 1.2 built-ins are listed explicitly via SUBRULE so Chevrotain can statically
+ * analyze their first sets, matching the pattern of the original SPARQL 1.2 builtInCall rule.
+ */
+const builtInPatch = {
+  name: gram12.builtInCall.name,
+  impl: ($: ImplArgs) => (c: Parameters<ReturnType<typeof gram12.builtInCall.impl>>[0]) => $.OR2([
+    { ALT: () => gram11.builtInCall.impl($)(c) },
+    { ALT: () => $.SUBRULE(gram12.buildInLangDir) },
+    { ALT: () => $.SUBRULE(gram12.buildInLangStrDir) },
+    { ALT: () => $.SUBRULE(gram12.buildInHasLang) },
+    { ALT: () => $.SUBRULE(gram12.buildInHasLangDir) },
+    { ALT: () => $.SUBRULE(gram12.buildInIsTriple) },
+    { ALT: () => $.SUBRULE(gram12.buildInTriple) },
+    { ALT: () => $.SUBRULE(gram12.buildInSubject) },
+    { ALT: () => $.SUBRULE(gram12.buildInPredicate) },
+    { ALT: () => $.SUBRULE(gram12.buildInObject) },
     { ALT: () => $.SUBRULE(gramAdj.builtInAdjust) },
   ]),
 };
