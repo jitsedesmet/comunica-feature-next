@@ -12,25 +12,25 @@ function wrapCallback(fn) {
     return fn;
   }
   return function(...args) {
-    return fn.call(this, { expect: global.expect, ...args[0] }, ...args.slice(1));
+    return fn.call(this, { expect: globalThis.expect, ...args[0] }, ...args.slice(1));
   };
 }
 
 const it = Object.assign(
-  (name, fn, timeout) => global.it(name, wrapCallback(fn), timeout),
+  (name, fn, timeout) => globalThis.it(name, wrapCallback(fn), timeout),
   {
-    todo: (name) => global.it.todo(name),
-    skip: (name, fn, timeout) => global.it.skip(name, wrapCallback(fn), timeout),
-    only: (name, fn, timeout) => global.it.only(name, wrapCallback(fn), timeout),
-    each: (...args) => global.it.each(...args),
+    todo: name => globalThis.it.todo(name),
+    skip: (name, fn, timeout) => globalThis.it.skip(name, wrapCallback(fn), timeout),
+    only: (name, fn, timeout) => globalThis.it.only(name, wrapCallback(fn), timeout),
+    each: (...args) => globalThis.it.each(...args),
   },
 );
 
 const describe = Object.assign(
-  (name, fn) => global.describe(name, fn),
+  (name, fn) => globalThis.describe(name, fn),
   {
-    skip: (name, fn) => global.describe.skip(name, fn),
-    only: (name, fn) => global.describe.only(name, fn),
+    skip: (name, fn) => globalThis.describe.skip(name, fn),
+    only: (name, fn) => globalThis.describe.only(name, fn),
   },
 );
 
@@ -39,8 +39,8 @@ module.exports = {
   it,
   describe,
   test: it,
-  beforeEach: global.beforeEach,
-  afterEach: global.afterEach,
-  beforeAll: global.beforeAll,
-  afterAll: global.afterAll,
+  beforeEach: globalThis.beforeEach,
+  afterEach: globalThis.afterEach,
+  beforeAll: globalThis.beforeAll,
+  afterAll: globalThis.afterAll,
 };

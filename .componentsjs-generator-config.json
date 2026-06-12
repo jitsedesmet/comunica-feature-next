@@ -2,9 +2,17 @@
   "source": "lib",
   "ignorePackagePaths": [
     "engines/query-sparql-next",
-    "packages/utils-algebra-next",
-    "packages/utils-traqula-parser-next"
+    "packages/utils-algebra-next"
   ],
-  "ignoreComponents": [],
+  "ignoreComponents": [
+    "toAlgebra",
+    "toAst",
+    "SparqlNextParser",
+    "FullSparqlNextParser",
+    "sparqlNextParserBuilder",
+    "sparqlNextLexerBuilder",
+    "SparqlGrammarRule12",
+    "SparqlGeneratorRule12"
+  ],
   "modulePrefix": {}
 }

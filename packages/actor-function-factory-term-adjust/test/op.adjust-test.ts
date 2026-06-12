@@ -1,4 +1,4 @@
-import { toAlgebra, SparqlNextParser } from '@comunica/utils-traqula-sparql-next';
+import { toAlgebra, SparqlNextParser } from '@comunica/actor-query-parse-sparql-next';
 import { ActionContext } from '@comunica/core';
 import { ActorFunctionFactoryTermAdjust, adjustDisableKey } from '../lib';
 import { runFuncTestTable, createFuncMediator } from './util';
@@ -37,7 +37,7 @@ describe('evaluation of \'ADJUST\'', () => {
 
   it('returns failTest when adjustDisableKey is set in context', async() => {
     const mediator = createFuncMediator([ args => new ActorFunctionFactoryTermAdjust(args) ], {});
-    const bus = (mediator as any).bus;
+    const bus = (<any> mediator).bus;
     const actor: ActorFunctionFactoryTermAdjust = bus.actors[0];
     const testResult = await actor.test({
       functionName: 'adjust',

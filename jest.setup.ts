@@ -1,4 +1,4 @@
-import { expect } from '@jest/globals';
+export {};
 
 // We cannot use native instanceOf to test whether expected is a Term!
 function objectsEqual(
@@ -12,12 +12,10 @@ function objectsEqual(
   }
 
   if (isTerm(received)) {
-    // @ts-expect-error TS2345
-    return received.equals(expected);
+    return received.equals(<{ termType: unknown } | null> expected);
   }
   if (isTerm(expected)) {
-    // @ts-expect-error TS2345
-    return expected.equals(received);
+    return expected.equals(<{ termType: unknown } | null> received);
   }
 
   if (Array.isArray(received)) {
@@ -37,24 +35,24 @@ function objectsEqual(
     if (expected === undefined || expected === null || isPrimitive(expected) || Array.isArray(expected)) {
       return false;
     }
-    const keysFirst = Object.keys(received);
-    const receivedMatches = selector(received);
+    const receivedRec = <Record<string, unknown>> received;
+    const expectedRec = <Record<string, unknown>> expected;
+    const keysFirst = Object.keys(receivedRec);
+    const receivedMatches = selector(receivedRec);
 
     for (const key of keysFirst) {
       if (receivedMatches && ignoreKeys.includes(key)) {
         continue;
       }
-      // @ts-expect-error TS7053
-      if (!objectsEqual(received[key], expected[key], selector, ignoreKeys)) {
+      if (!objectsEqual(receivedRec[key], expectedRec[key], selector, ignoreKeys)) {
         return false;
       }
     }
 
     // Ensure no keys are missing in the received object
-    const keysSecond = Object.keys(expected);
+    const keysSecond = Object.keys(expectedRec);
     for (const key of keysSecond) {
-      // @ts-expect-error TS7053
-      if (!objectsEqual(received[key], expected[key], selector, ignoreKeys)) {
+      if (!objectsEqual(receivedRec[key], expectedRec[key], selector, ignoreKeys)) {
         return false;
       }
     }
@@ -86,22 +84,22 @@ expect.extend({
   toEqualParsedQuery(received: unknown, expected: unknown) {
     const pass = objectsEqual(received, expected, () => false, []);
     const message = pass ?
-      () =>
+        () =>
         `${this.utils.matcherHint('toEqualParsedQuery')}\n\n` +
         `Expected: ${this.utils.printExpected(expected)}\n` +
         `Received: ${this.utils.printReceived(received)}` :
-      () => {
-        const diffString = this.utils.diff(expected, received, {
-          expand: this.expand,
-        });
-        return (
+        () => {
+          const diffString = this.utils.diff(expected, received, {
+            expand: this.expand,
+          });
+          return (
           `${this.utils.matcherHint('toEqualParsedQuery')}\n\n${
             diffString ?
               `Difference:\n\n${diffString}` :
               `Expected: ${this.utils.printExpected(expected)}\n` +
               `Received: ${this.utils.printReceived(received)}`}`
-        );
-      };
+          );
+        };
 
     return { pass, message };
   },
@@ -113,22 +111,22 @@ expect.extend({
   ) {
     const pass = objectsEqual(received, expected, selector, ignoreKeys);
     const message = pass ?
-      () =>
+        () =>
         `${this.utils.matcherHint('toEqualParsedQueryIgnoring')}\n\n` +
         `Expected: ${this.utils.printExpected(expected)}\n` +
         `Received: ${this.utils.printReceived(received)}` :
-      () => {
-        const diffString = this.utils.diff(expected, received, {
-          expand: this.expand,
-        });
-        return (
+        () => {
+          const diffString = this.utils.diff(expected, received, {
+            expand: this.expand,
+          });
+          return (
           `${this.utils.matcherHint('toEqualParsedQueryIgnoring')}\n\n${
             diffString ?
               `Difference:\n\n${diffString}` :
               `Expected: ${this.utils.printExpected(expected)}\n` +
               `Received: ${this.utils.printReceived(received)}`}`
-        );
-      };
+          );
+        };
 
     return { pass, message };
   },
