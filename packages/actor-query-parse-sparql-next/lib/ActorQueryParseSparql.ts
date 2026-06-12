@@ -4,8 +4,9 @@ import { KeysInitQuery } from '@comunica/context-entries';
 import type { IActorTest, TestResult } from '@comunica/core';
 import { failTest, passTestVoid } from '@comunica/core';
 import type { ComunicaDataFactory } from '@comunica/types';
-import { toAlgebra, SparqlNextParser } from '@comunica/utils-traqula-sparql-next';
 import { AstFactory } from '@traqula/rules-sparql-1-2';
+import { toAlgebra } from './algebra';
+import { SparqlNextParser } from './parser';
 
 /**
  * A comunica Algebra SPARQL Next Parse Actor.

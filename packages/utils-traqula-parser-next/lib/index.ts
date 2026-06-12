@@ -1,4 +1,1 @@
-export * from './algebra';
-export * from './lexer';
-export * from './parser';
-export * from './types';
+export * from '@comunica/actor-query-parse-sparql-next';

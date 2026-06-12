@@ -57,13 +57,13 @@ describe('a SPARQL 1.2 parser', () => {
   describe('negative SPARQL 1.1', () => {
     it.each([ ...negativeTest('sparql-1-1-invalid') ])('should NOT parse $name', async({ statics }) => {
       const { query } = await statics();
-      expect(() => sourceTrackingParser.parse(query, context)).toThrow();
-      expect(() => noSourceTrackingParser.parse(query, context)).toThrow();
+      expect(() => sourceTrackingParser.parse(query, context)).toThrow(/./u);
+      expect(() => noSourceTrackingParser.parse(query, context)).toThrow(/./u);
     });
   });
 
   describe('positive sparql 1.2', () => {
-    it.each([ ...positiveTest('sparql-1-2') ])('can parse $name', async({ name, statics }) => {
+    it.each([ ...positiveTest('sparql-1-2') ])('can parse $name', async({ statics }) => {
       const { query, astWithSource } = await statics();
       const astNoSource = astFactory.forcedAutoGenTree(<object> astWithSource);
       const res: unknown = sourceTrackingParser.parse(query, context);
@@ -80,11 +80,11 @@ describe('a SPARQL 1.2 parser', () => {
       'sparql-1-2-syntax-compound-tripleterm-subject',
       'sparql-1-2-syntax-subject-tripleterm',
     ]);
-    it.each([ ...negativeTest('sparql-1-2-invalid', name => !skip.has(name)) ])
-    ('should NOT parse $name', async({ statics }) => {
+    const negTests = negativeTest('sparql-1-2-invalid', name => !skip.has(name));
+    it.each([ ...negTests ])('should NOT parse $name', async({ statics }) => {
       const { query } = await statics();
-      expect(() => sourceTrackingParser.parse(query, context)).toThrow();
-      expect(() => noSourceTrackingParser.parse(query, context)).toThrow();
+      expect(() => sourceTrackingParser.parse(query, context)).toThrow(/./u);
+      expect(() => noSourceTrackingParser.parse(query, context)).toThrow(/./u);
     });
   });
 
