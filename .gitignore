@@ -4,6 +4,8 @@ node_modules
 lerna-debug.log
 yarn-error.log
 *.js
+*.js.map
+*.d.ts
 **/lib/**/*.js
 **/lib/**/*.js.map
 **/lib/**/*.d.ts

@@ -5,16 +5,13 @@ import type {
 } from '@comunica/utils-expression-evaluator';
 import {
   defaultedDateTimeRepresentation,
-
   toUTCDate,
   defaultedDurationRepresentation,
   addDurationToDateTime,
   DateTimeLiteral,
   declare,
   TypeURL,
-
   DateLiteral,
-
   TimeLiteral,
 } from '@comunica/utils-expression-evaluator';
 
