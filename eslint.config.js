@@ -139,6 +139,7 @@ module.exports = config([
       'jest.setup.d.ts',
       // The traqula subproject has its own ESLint and TypeScript configs
       'traqula/**',
+      'comunica/**'
     ],
   },
 ]);
