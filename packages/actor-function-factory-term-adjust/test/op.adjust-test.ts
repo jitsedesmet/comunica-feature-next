@@ -4,8 +4,8 @@ import {
   dateTyped,
   dayTimeDurationTyped,
   timeTyped,
-} from '@comunica/utils-expression-evaluator/lib/test-util/Aliases';
-import { Notation } from '@comunica/utils-expression-evaluator/lib/test-util/TestTable';
+} from '@comunica/utils-expression-evaluator/test-util/Aliases';
+import { Notation } from '@comunica/utils-expression-evaluator/test-util/TestTable';
 import { ActorFunctionFactoryTermAdjust } from '../lib';
 import { runFuncTestTable } from './util';
 
