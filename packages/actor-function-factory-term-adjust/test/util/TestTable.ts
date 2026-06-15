@@ -36,23 +36,25 @@ abstract class Table<RowType extends Row> {
   public abstract test(): void;
 
   protected async testExpression(expr: string, result: string) {
-    const { config, additionalPrefixes } = this.def;
+    const { config, additionalPrefixes, exprEvalFactory } = this.def;
     const aliases = this.def.aliases ?? {};
     result = aliases[result] || result;
     const evaluated = await generalEvaluate({
       ...this.def,
       expression: template(expr, additionalPrefixes),
       generalEvaluationConfig: config,
+      exprEvalFactory,
     });
     expect(evaluated.asyncResult).toEqual(stringToTermPrefix(result, additionalPrefixes));
   }
 
   protected async testErrorExpression(expr: string, error: string) {
-    const { config, additionalPrefixes } = this.def;
+    const { config, additionalPrefixes, exprEvalFactory } = this.def;
     const result = await generalErrorEvaluation({
       ...this.def,
       expression: template(expr, additionalPrefixes),
       generalEvaluationConfig: config,
+      exprEvalFactory,
     });
     expect(result).toBeDefined();
     expect(() => {

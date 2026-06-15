@@ -15,51 +15,6 @@ import {
   TimeLiteral,
 } from '@comunica/utils-expression-evaluator';
 
-function numSerializer(num: number, min = 2): string {
-  return num.toLocaleString(undefined, { minimumIntegerDigits: min, useGrouping: false });
-}
-
-// TODO: fix upstream
-function serializeTimeZone(tz: Partial<ITimeZoneRepresentation>): string {
-  // https://www.w3.org/TR/xmlschema-2/#dateTime-timezones
-  if (tz.zoneHours === undefined && tz.zoneMinutes === undefined) {
-    return '';
-  }
-  const hours = tz.zoneHours ?? 0;
-  const minutes = tz.zoneMinutes ?? 0;
-  // SerializeTimeZone({ zoneHours: 5, zoneMinutes: 4 }) returns +05:04
-  return `${hours >= 0 ? `+${numSerializer(hours)}` : numSerializer(hours)}:${numSerializer(Math.abs(minutes))}`;
-}
-
-class MyDateTimeLiteral extends DateTimeLiteral {
-  public override str(): string {
-    // TODO: fix upstream
-    return super.str() + serializeTimeZone(this.typedValue);
-  }
-}
-
-class MyDateLiteral extends DateLiteral {
-  public override str(): string {
-    // Upstream serializeDate skips timezone when zoneMinutes is undefined; use local serializer in that case
-    const { zoneHours, zoneMinutes } = this.typedValue;
-    if (zoneHours !== undefined && zoneMinutes !== undefined) {
-      return super.str();
-    }
-    return super.str() + serializeTimeZone(this.typedValue);
-  }
-}
-
-class MyTimeLiteral extends TimeLiteral {
-  public override str(): string {
-    // Upstream serializeTime skips timezone when zoneMinutes is undefined; use local serializer in that case
-    const { zoneHours, zoneMinutes } = this.typedValue;
-    if (zoneHours !== undefined && zoneMinutes !== undefined) {
-      return super.str();
-    }
-    return super.str() + serializeTimeZone(this.typedValue);
-  }
-}
-
 function myFloor(x: number): number {
   if (x < 0) {
     return -1 * Math.floor(-1 * x);
@@ -88,7 +43,7 @@ function adjustDateTime([ date, timezone ]: [DateTimeLiteral, DayTimeDurationLit
   const typeDate = date.typedValue;
   const typeDur = timezone.typedValue;
   if (typeDate.zoneMinutes ?? typeDate.zoneHours === undefined) {
-    return new MyDateTimeLiteral({
+    return new DateTimeLiteral({
       ...typeDate,
       zoneHours: typeDur.hours,
       zoneMinutes: typeDur.minutes,
@@ -104,7 +59,7 @@ function adjustDateTime([ date, timezone ]: [DateTimeLiteral, DayTimeDurationLit
     { zoneHours: 0, zoneMinutes: 0 },
   ));
   const firstOp = addDurationToDateTime(typeDate, timeDif);
-  return new MyDateTimeLiteral({
+  return new DateTimeLiteral({
     ...firstOp,
     zoneHours: typeDur.hours,
     zoneMinutes: typeDur.minutes,
@@ -131,8 +86,7 @@ export class TermFunctionAdjust extends TermFunctionBase {
             const asDateTime = new DateTimeLiteral(defaultedDateTimeRepresentation(date.typedValue));
             const asTimedDate = adjustDateTime([ asDateTime, timezone ]);
             const tv = asTimedDate.typedValue;
-            // TODO: can introduce this trim function upstream
-            return new MyDateLiteral({
+            return new DateLiteral({
               day: tv.day,
               month: tv.month,
               year: tv.year,
@@ -151,7 +105,7 @@ export class TermFunctionAdjust extends TermFunctionBase {
             });
             const asTimedDate = adjustDateTime([ asDateTime, timezone ]);
             const tv = asTimedDate.typedValue;
-            return new MyTimeLiteral({
+            return new TimeLiteral({
               hours: tv.hours,
               minutes: tv.minutes,
               seconds: tv.seconds,
