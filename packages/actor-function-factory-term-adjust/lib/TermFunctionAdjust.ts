@@ -13,27 +13,32 @@ import {
   TimeLiteral,
 } from '@comunica/utils-expression-evaluator';
 
-function adjustDateTime([ date, timezone ]: [DateTimeLiteral, DayTimeDurationLiteral]): DateTimeLiteral {
-  const typeDate = date.typedValue;
-  const typeDur = timezone.typedValue;
-  if (typeDate.zoneHours === undefined) {
+function adjustDateTime([ dateLiteral, zoneLiteral ]: [DateTimeLiteral, DayTimeDurationLiteral]): DateTimeLiteral {
+  const dateTime = dateLiteral.typedValue;
+  const zone = zoneLiteral.typedValue;
+  if (dateTime.zoneHours === undefined) {
+    // If $arg does not have a timezone component and $timezone is not the empty sequence,
+    //   then the result is $arg with $timezone as the timezone component.
     return new DateTimeLiteral({
-      ...typeDate,
-      zoneHours: typeDur.hours,
-      zoneMinutes: typeDur.minutes,
+      ...dateTime,
+      zoneHours: zone.hours,
+      zoneMinutes: zone.minutes,
     });
   }
+  // If $arg has a timezone component and $timezone is not the empty sequence, then the result is the xs:dateTime value
+  // that is equal to $arg and that has a timezone component equal to $timezone.
+
   // Adjust time: result = arg + (newTimezone - oldTimezone)
   // zoneMinutes is always defined when zoneHours is defined (ITimeZoneRepresentation invariant)
   const timeDif = defaultedDurationRepresentation({
-    hours: (typeDur.hours ?? 0) - typeDate.zoneHours,
-    minutes: (typeDur.minutes ?? 0) - typeDate.zoneMinutes!,
+    hours: (zone.hours ?? 0) - (dateTime.zoneHours ?? 0),
+    minutes: (zone.minutes ?? 0) - (dateTime.zoneMinutes ?? 0),
   });
-  const firstOp = addDurationToDateTime(typeDate, timeDif);
+  const firstOp = addDurationToDateTime(dateTime, timeDif);
   return new DateTimeLiteral({
     ...firstOp,
-    zoneHours: typeDur.hours,
-    zoneMinutes: typeDur.minutes,
+    zoneHours: zone.hours,
+    zoneMinutes: zone.minutes,
   });
 }
 

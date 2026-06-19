@@ -9,7 +9,9 @@
     "./traqula",
     "./comunica",
     "comunica/packages/*",
-    "comunica/engines/*"
+    "comunica/engines/*",
+    "traqula/engines/*",
+    "traqula/packages/*"
   ],
   "scripts": {
     "build": "npm run build:ts && npm run build:components",
