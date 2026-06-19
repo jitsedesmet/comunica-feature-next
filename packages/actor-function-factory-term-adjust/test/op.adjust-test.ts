@@ -25,10 +25,15 @@ describe('evaluation of \'ADJUST\'', () => {
     '${dateTimeTyped('2002-03-07T10:00:00-07:00')}' '${dayTimeDurationTyped('PT10H')}' = '${dateTimeTyped('2002-03-08T03:00:00+10:00')}'
     '${dateTimeTyped('2002-03-07T00:00:00+01:00')}' '${dayTimeDurationTyped('-PT8H')}' = '${dateTimeTyped('2002-03-06T15:00:00-08:00')}'
     '${dateTimeTyped('2002-03-07T10:00:00')}' '${dayTimeDurationTyped('PT0H')}' = '${dateTimeTyped('2002-03-07T10:00:00')}'
+    '${dateTimeTyped('2002-03-07T10:00:00+05:30')}' '${dayTimeDurationTyped('-PT10H')}' = '${dateTimeTyped('2002-03-06T18:30:00-10:00')}'
+    '${dateTimeTyped('2002-03-07T10:00:00-05:30')}' '${dayTimeDurationTyped('PT10H')}' = '${dateTimeTyped('2002-03-08T01:30:00+10:00')}'
+    '${dateTimeTyped('2002-03-07T10:00:00+01:00')}' '${dayTimeDurationTyped('PT30M')}' = '${dateTimeTyped('2002-03-07T09:30:00+00:30')}'
+    '${dateTimeTyped('2002-03-07T10:00:00+01:00')}' '${dayTimeDurationTyped('-PT10H30M')}' = '${dateTimeTyped('2002-03-06T22:30:00-10:30')}'
     
     '${dateTyped('2002-03-07')}' '${dayTimeDurationTyped('-PT10H')}' = '${dateTyped('2002-03-07-10:00')}'
     '${dateTyped('2002-03-07-07:00')}' '${dayTimeDurationTyped('-PT10H')}' = '${dateTyped('2002-03-06-10:00')}'
     '${dateTyped('2002-03-07')}' '${dayTimeDurationTyped('-PT10H30M')}' = '${dateTyped('2002-03-07-10:30')}'
+    '${dateTyped('2002-03-07+05:30')}' '${dayTimeDurationTyped('-PT10H')}' = '${dateTyped('2002-03-06-10:00')}'
 
     '${timeTyped('10:00:00')}' '${dayTimeDurationTyped('-PT10H')}' = '${timeTyped('10:00:00-10:00')}'
     '${timeTyped('10:00:00')}' '${dayTimeDurationTyped('-PT10H')}' = '${timeTyped('10:00:00-10:00')}'
@@ -36,6 +41,8 @@ describe('evaluation of \'ADJUST\'', () => {
     '${timeTyped('10:00:00-07:00')}' '${dayTimeDurationTyped('PT10H')}' = '${timeTyped('03:00:00+10:00')}'
     '${timeTyped('10:00:00')}' '${dayTimeDurationTyped('-PT10H30M')}' = '${timeTyped('10:00:00-10:30')}'
     '${timeTyped('10:00:00')}' '${dayTimeDurationTyped('PT30M')}' = '${timeTyped('10:00:00+00:30')}'
+    '${timeTyped('10:00:00+05:30')}' '${dayTimeDurationTyped('-PT10H')}' = '${timeTyped('18:30:00-10:00')}'
+    '${timeTyped('10:00:00-05:30')}' '${dayTimeDurationTyped('PT10H')}' = '${timeTyped('01:30:00+10:00')}'
   `,
   });
 });

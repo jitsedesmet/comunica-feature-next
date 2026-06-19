@@ -1,11 +1,9 @@
 import { TermFunctionBase } from '@comunica/bus-function-factory';
-import type { IDateTimeRepresentation, IDurationRepresentation, ITimeZoneRepresentation } from '@comunica/types';
 import type {
   DayTimeDurationLiteral,
 } from '@comunica/utils-expression-evaluator';
 import {
   defaultedDateTimeRepresentation,
-  toUTCDate,
   defaultedDurationRepresentation,
   addDurationToDateTime,
   DateTimeLiteral,
@@ -15,49 +13,22 @@ import {
   TimeLiteral,
 } from '@comunica/utils-expression-evaluator';
 
-function myFloor(x: number): number {
-  if (x < 0) {
-    return -1 * Math.floor(-1 * x);
-  }
-  return Math.floor(x);
-}
-
-function elapsedDuration(
-  first: IDateTimeRepresentation,
-  second: IDateTimeRepresentation,
-  defaultTimeZone: ITimeZoneRepresentation,
-): Partial<IDurationRepresentation> {
-  const d1 = toUTCDate(first, defaultTimeZone);
-  const d2 = toUTCDate(second, defaultTimeZone);
-  const diff = d1.getTime() - d2.getTime();
-  // Todo: something is off here for negative days
-  return {
-    day: myFloor(diff / (1_000 * 60 * 60 * 24)),
-    hours: myFloor((diff % (1_000 * 60 * 60 * 24)) / (1_000 * 60 * 60)),
-    minutes: myFloor(diff % (1_000 * 60 * 60) / (1_000 * 60)),
-    seconds: diff % (1_000 * 60),
-  };
-}
-
 function adjustDateTime([ date, timezone ]: [DateTimeLiteral, DayTimeDurationLiteral]): DateTimeLiteral {
   const typeDate = date.typedValue;
   const typeDur = timezone.typedValue;
-  if (typeDate.zoneMinutes ?? typeDate.zoneHours === undefined) {
+  if (typeDate.zoneHours === undefined) {
     return new DateTimeLiteral({
       ...typeDate,
       zoneHours: typeDur.hours,
       zoneMinutes: typeDur.minutes,
     });
   }
-  // Take the timezone from the dateTime, subtract it from the dateTime, add the new timezone
-  const timeDif = defaultedDurationRepresentation(elapsedDuration(
-    defaultedDurationRepresentation(typeDur),
-    defaultedDurationRepresentation({
-      hours: typeDate.zoneHours,
-      minutes: typeDate.zoneMinutes,
-    }),
-    { zoneHours: 0, zoneMinutes: 0 },
-  ));
+  // Adjust time: result = arg + (newTimezone - oldTimezone)
+  // zoneMinutes is always defined when zoneHours is defined (ITimeZoneRepresentation invariant)
+  const timeDif = defaultedDurationRepresentation({
+    hours: (typeDur.hours ?? 0) - typeDate.zoneHours,
+    minutes: (typeDur.minutes ?? 0) - typeDate.zoneMinutes!,
+  });
   const firstOp = addDurationToDateTime(typeDate, timeDif);
   return new DateTimeLiteral({
     ...firstOp,
