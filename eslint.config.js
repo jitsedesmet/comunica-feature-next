@@ -136,10 +136,7 @@ module.exports = config([
       '**/componentsjs-error-state.json',
       'lerna.json',
       // Generated declaration files in root (not part of any package)
-      'jest.setup.d.ts',
-      // The traqula subproject has its own ESLint and TypeScript configs
-      'traqula/**',
-      'comunica/**'
+      'jest.setup.d.ts'
     ],
   },
 ]);

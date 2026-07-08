@@ -46,13 +46,13 @@
     "@comunica/core": "^5.2.3",
     "@comunica/types": "^5.2.3",
     "@comunica/utils-algebra": "^5.2.0",
-    "@traqula/algebra-sparql-1-2": "^1.1.4",
-    "@traqula/algebra-transformations-1-2": "^1.1.4",
+    "@traqula/algebra-sparql-1-2": "^1.1.7",
+    "@traqula/algebra-transformations-1-2": "^1.1.7",
     "@traqula/core": "^1.1.4",
-    "@traqula/parser-sparql-1-2": "^1.1.4",
+    "@traqula/parser-sparql-1-2": "^1.1.6",
     "@traqula/rules-sparql-1-1": "^1.1.4",
     "@traqula/rules-sparql-1-1-adjust": "^1.1.4",
-    "@traqula/rules-sparql-1-2": "^1.1.4"
+    "@traqula/rules-sparql-1-2": "^1.1.6"
   },
   "devDependencies": {
     "@traqula/test-utils": "^1.1.3"

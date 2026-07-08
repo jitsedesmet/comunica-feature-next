@@ -6,12 +6,8 @@
     "engines/*",
     "packages/*",
     "performance/*",
-    "./traqula",
-    "./comunica",
     "comunica/packages/*",
-    "comunica/engines/*",
-    "traqula/engines/*",
-    "traqula/packages/*"
+    "comunica/engines/*"
   ],
   "scripts": {
     "build": "npm run build:ts && npm run build:components",
@@ -91,16 +87,6 @@
     "test"
   ],
   "resolutions": {
-    "@traqula/algebra-sparql-1-1": "1.1.4",
-    "@traqula/algebra-sparql-1-2": "1.1.4",
-    "@traqula/algebra-transformations-1-1": "1.1.4",
-    "@traqula/algebra-transformations-1-2": "1.1.4",
-    "@traqula/chevrotain": "1.1.0",
-    "@traqula/core": "1.1.4",
-    "@traqula/parser-sparql-1-1": "1.1.4",
-    "@traqula/parser-sparql-1-2": "1.1.4",
-    "@traqula/rules-sparql-1-1": "1.1.4",
-    "@traqula/rules-sparql-1-2": "1.1.4",
     "rdf-parse": "5.0.0"
   }
 }
