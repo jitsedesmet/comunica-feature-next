@@ -13,10 +13,12 @@ import {
   TimeLiteral,
 } from '@comunica/utils-expression-evaluator';
 
-function adjustDateTime([ dateLiteral, zoneLiteral ]: [DateTimeLiteral, DayTimeDurationLiteral]): DateTimeLiteral {
+export function adjustDateTime(
+  [ dateLiteral, zoneLiteral ]: [DateTimeLiteral, DayTimeDurationLiteral],
+): DateTimeLiteral {
   const dateTime = dateLiteral.typedValue;
   const zone = zoneLiteral.typedValue;
-  if (dateTime.zoneHours === undefined) {
+  if (dateTime.zoneHours === undefined && dateTime.zoneMinutes === undefined) {
     // If $arg does not have a timezone component and $timezone is not the empty sequence,
     //   then the result is $arg with $timezone as the timezone component.
     return new DateTimeLiteral({
@@ -29,7 +31,6 @@ function adjustDateTime([ dateLiteral, zoneLiteral ]: [DateTimeLiteral, DayTimeD
   // that is equal to $arg and that has a timezone component equal to $timezone.
 
   // Adjust time: result = arg + (newTimezone - oldTimezone)
-  // zoneMinutes is always defined when zoneHours is defined (ITimeZoneRepresentation invariant)
   const timeDif = defaultedDurationRepresentation({
     hours: (zone.hours ?? 0) - (dateTime.zoneHours ?? 0),
     minutes: (zone.minutes ?? 0) - (dateTime.zoneMinutes ?? 0),

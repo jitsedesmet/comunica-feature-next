@@ -1,4 +1,5 @@
 import { toAlgebra, SparqlNextParser } from '@comunica/actor-query-parse-sparql-next';
+import { DateTimeLiteral, DayTimeDurationLiteral } from '@comunica/utils-expression-evaluator';
 import {
   dateTimeTyped,
   dateTyped,
@@ -8,6 +9,7 @@ import {
   runFuncTestTable,
 } from '@comunica/utils-jest';
 import { ActorFunctionFactoryTermAdjust } from '../lib';
+import { adjustDateTime } from '../lib/TermFunctionAdjust';
 
 describe('evaluation of \'ADJUST\'', () => {
   const parser = new SparqlNextParser({ lexerConfig: { positionTracking: 'full' }});
@@ -44,5 +46,46 @@ describe('evaluation of \'ADJUST\'', () => {
     '${timeTyped('10:00:00+05:30')}' '${dayTimeDurationTyped('-PT10H')}' = '${timeTyped('18:30:00-10:00')}'
     '${timeTyped('10:00:00-05:30')}' '${dayTimeDurationTyped('PT10H')}' = '${timeTyped('01:30:00+10:00')}'
   `,
+  });
+});
+
+describe('adjustDateTime with violated ITimeZoneRepresentation invariant', () => {
+  it('treats missing zoneMinutes as 0 when zoneHours is defined', () => {
+    // DateTimeLiteral can be constructed with zoneHours defined but zoneMinutes omitted,
+    // violating the invariant that both fields come together. The ?? 0 fallback handles this.
+    const dateLiteral = new DateTimeLiteral({
+      year: 2002,
+      month: 3,
+      day: 7,
+      hours: 10,
+      minutes: 0,
+      seconds: 0,
+      zoneHours: -7,
+      // ZoneMinutes intentionally omitted
+    });
+    const zoneLiteral = new DayTimeDurationLiteral({ hours: -10 });
+    const result = adjustDateTime([ dateLiteral, zoneLiteral ]);
+    expect(result.str()).toBe('2002-03-07T07:00:00-10:00');
+  });
+
+  it('treats missing zoneHours as 0 when zoneMinutes is defined', () => {
+    // The symmetric invariant violation: zoneMinutes defined but zoneHours omitted.
+    // With the && condition the function reaches the adjust path, so (zoneHours ?? 0) fires.
+    // Input: 2002-03-07T10:00:00 with zoneMinutes=30 (offset +00:30), zone = PT0H (UTC).
+    // timeDif = { hours: 0 - 0, minutes: 0 - 30 } = { hours: 0, minutes: -30 }
+    // → adjusted time: 09:30, new zone: Z → "2002-03-07T09:30:00Z"
+    const dateLiteral = new DateTimeLiteral({
+      year: 2002,
+      month: 3,
+      day: 7,
+      hours: 10,
+      minutes: 0,
+      seconds: 0,
+      // ZoneHours intentionally omitted
+      zoneMinutes: 30,
+    });
+    const zoneLiteral = new DayTimeDurationLiteral({ hours: 0 });
+    const result = adjustDateTime([ dateLiteral, zoneLiteral ]);
+    expect(result.str()).toBe('2002-03-07T09:30:00Z');
   });
 });
