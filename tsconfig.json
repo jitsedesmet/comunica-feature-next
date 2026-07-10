@@ -18,9 +18,7 @@
     "inlineSources": true,
     "preserveConstEnums": true,
     "removeComments": false,
-    "sourceMap": true,
-    "ignoreDeprecations": "6.0",
-    "skipLibCheck": true
+    "sourceMap": true
   },
   "include": [
     "jest.setup.ts",
