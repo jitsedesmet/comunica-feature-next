@@ -136,7 +136,9 @@ module.exports = config([
       '**/componentsjs-error-state.json',
       'lerna.json',
       // Generated declaration files in root (not part of any package)
-      'jest.setup.d.ts'
+      'jest.setup.d.ts',
+      // Markdown files are not TypeScript and not included in tsconfig
+      '**/*.md',
     ],
   },
 ]);

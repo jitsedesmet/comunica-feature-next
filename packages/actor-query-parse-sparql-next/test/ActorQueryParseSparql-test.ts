@@ -79,7 +79,7 @@ describe('ActorQueryParseSparql', () => {
       });
     });
 
-    it('should run for a SPARQL-star query', async() => {
+    it('should run for a SPARQL 1.2 query', async() => {
       const result = await actor.run({ query: 'SELECT * WHERE { << ?a a ?q >> a ?b }', context });
       expect(result).toBeTruthy();
     });

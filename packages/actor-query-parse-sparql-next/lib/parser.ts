@@ -15,17 +15,8 @@ import { sparqlNextLexerBuilder } from './lexer';
  */
 const builtInPatch = {
   name: gram12.builtInCall.name,
-  impl: ($: ImplArgs) => (c: Parameters<ReturnType<typeof gram12.builtInCall.impl>>[0]) => $.OR2([
-    { ALT: () => gram11.builtInCall.impl($)(c) },
-    { ALT: () => $.SUBRULE(gram12.buildInLangDir) },
-    { ALT: () => $.SUBRULE(gram12.buildInLangStrDir) },
-    { ALT: () => $.SUBRULE(gram12.buildInHasLang) },
-    { ALT: () => $.SUBRULE(gram12.buildInHasLangDir) },
-    { ALT: () => $.SUBRULE(gram12.buildInIsTriple) },
-    { ALT: () => $.SUBRULE(gram12.buildInTriple) },
-    { ALT: () => $.SUBRULE(gram12.buildInSubject) },
-    { ALT: () => $.SUBRULE(gram12.buildInPredicate) },
-    { ALT: () => $.SUBRULE(gram12.buildInObject) },
+  impl: ($: ImplArgs) => (c: Parameters<ReturnType<typeof gram12.builtInCall.impl>>[0]) => $.OR3([
+    { ALT: () => gram12.builtInCall.impl($)(c) },
     { ALT: () => $.SUBRULE(gramAdj.builtInAdjust) },
   ]),
 };

@@ -53,7 +53,6 @@ export class TermFunctionAdjust extends TermFunctionBase {
       arity: 2,
       operator: 'adjust',
       overloads: declare('adjust')
-        // ExprEval.context.getSafe(KeysExpressionEvaluator.defaultTimeZone)
         .set(
           [ TypeURL.XSD_DATE_TIME, TypeURL.XSD_DAY_TIME_DURATION ],
           () => adjustDateTime,

@@ -7,13 +7,13 @@ import type { Algebra } from '@comunica/utils-algebra';
 import type { TypesNext } from './TypesNext';
 
 // Redefinitions of types
-export type KnownOperation = Algebra.KnownOperation | Lateral;
-export type KnownExpression = Algebra.KnownExpression;
-export type KnownPropertyPathSymbol = Algebra.KnownPropertyPathSymbol;
-export type KnownUpdate = Algebra.KnownUpdate;
+export type KnownNextOperation = Algebra.KnownOperation | Lateral;
+export type KnownNextExpression = Algebra.KnownExpression;
+export type KnownNextPropertyPathSymbol = Algebra.KnownPropertyPathSymbol;
+export type KnownNextUpdate = Algebra.KnownUpdate;
 
-export type TypedOperation<T extends Algebra.Types> = Extract<KnownOperation, { type: T }>;
-export type TypedExpression<T extends Algebra.ExpressionTypes> = Extract<KnownOperation, { subType: T }>;
+export type TypedKnownOperation<T extends Algebra.Types> = Extract<KnownNextOperation, { type: T }>;
+export type TypedKnownExpression<T extends Algebra.ExpressionTypes> = Extract<KnownNextOperation, { subType: T }>;
 
 export type Lateral = {
   type: TypesNext.LATERAL;

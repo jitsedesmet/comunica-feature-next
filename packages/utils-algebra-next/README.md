@@ -1,8 +1,8 @@
-# Comunica Algebra
+# Comunica Algebra Next
 
-[![npm version](https://badge.fury.io/js/%40comunica%2Futils-algebra.svg)](https://www.npmjs.com/package/@comunica/utils-algebra)
+[![npm version](https://badge.fury.io/js/%40comunica%2Futils-algebra-next.svg)](https://www.npmjs.com/package/@comunica/utils-algebra-next)
 
-Exposes the algebra used by Comunica.
+Extends the algebra used by Comunica with next-generation operations such as `Lateral` joins.
 
 This module is part of the [Comunica framework](https://github.com/comunica/comunica),
 and should only be used by [developers that want to build their own query engine](https://comunica.dev/docs/modify/).
@@ -12,22 +12,33 @@ and should only be used by [developers that want to build their own query engine
 ## Install
 
 ```bash
-$ yarn add @comunica/utils-algebra
+$ yarn add @comunica/utils-algebra-next
 ```
 
 ## Exposed
 
-* `Algebra`: Collection of algebra related types and transformers.
-* `AlgebraFactory`: A factory to create the algebra operations.
-* `algebraUtils`: a collection of utility functions for the algebra
+* `Algebra`: Extended algebra types, including `Lateral`, `KnownNextOperation`, `KnownNextExpression`, `KnownNextPropertyPathSymbol`, and `KnownNextUpdate`.
+* `AlgebraFactory`: An extended factory to create both standard and next-generation algebra operations (e.g. `createLateral()`).
+* `TypesNext`: An enum of algebra operation types introduced by Comunica Next (currently `LATERAL`).
 
 ## Additional info
 
-The algebra is derived from the algebra exposed by [Traqula](https://github.com/comunica/traqula), to contain the same operations but using interface instead of type unions.
-The usage of interfaces creates an environment where it is easy for third parties to extend Comunica to run on algebra operations that are unknown to base Comunica.
+This package extends [`@comunica/utils-algebra`](https://www.npmjs.com/package/@comunica/utils-algebra) with algebra operations that are defined by Comunica Next.
 
-Base Comunica function on an open interface `Operation`/`BaseOperation` that just describes an object with a string `type`. Whenever a type matches with a known types, the actors may conclude that the object will at least match the properties described by this algebra package.
-To help in this feat, the algebra exposes 3 type guards: `isKnownOperation`, `isKnownOperationSub`, and `isKnownSub` that will help you validate what Operations your actor receives.
-Actors should always be implemented in a way that matches this philosophy of open algebra types.
+### Lateral joins
 
-Additionally, allowing Comunica to declare for itself what it views as _'valid algebra'_ allows for more independent evolution of comunica in relation to the (algebra) parser it uses.
+The `Lateral` operation represents a [lateral join](https://github.com/w3c-cg/sparql-dev/blob/main/SEP/SEP-0006/sep-0006.md)
+where the right-hand side pattern can reference variables bound by the left-hand side.
+It takes two `Operation` inputs and is identified by the type `TypesNext.LATERAL` (`'lateral'`).
+
+A `Lateral` operation can be created via `AlgebraFactory`:
+
+```ts
+import { AlgebraFactory } from '@comunica/utils-algebra-next';
+
+const factory = new AlgebraFactory();
+const lateral = factory.createLateral(leftPattern, rightPattern);
+```
+
+The `KnownNextOperation` type union extends `Algebra.KnownOperation` with the new operations defined in this package,
+allowing type-safe handling of both base and next-generation operations throughout Comunica.
